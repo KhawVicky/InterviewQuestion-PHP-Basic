@@ -81,41 +81,13 @@ b. When user key in username and click “Submit”
 ### With referring to the tables above, please provide a single SQL statement to :
 
 a. update the employee with employee_no 1002 job to 4, with effective 2020-01-01.
-UPDATE employee_job_table
-SET job_id = 4, effective_date = '2020-01-01'
-WHERE employee_id = (SELECT employee_id FROM employee_profile_table WHERE employee_no = 1002);
+
 
 b. list out the employee name, employee no, effective date, job title.
-SELECT
-  e.employee_name,
-  e.employee_no,
-  ej.effective_date,
-  jp.job_name
-FROM
-  employee_profile_table e
-JOIN
-  employee_job_table ej ON e.employee_id = ej.employee_id
-JOIN
-  job_profile_table jp ON ej.job_id = jp.job_id;
+
 
 c. list out the employee name, employee no, **latest job title**
-SELECT
-  e.employee_name,
-  e.employee_no,
-  jp.job_name
-FROM
-  employee_profile_table e
-JOIN (
-  SELECT
-    ej.employee_id,
-    jp.job_name,
-    ROW_NUMBER() OVER (PARTITION BY ej.employee_id ORDER BY ej.effective_date DESC) AS rnk
-  FROM
-    employee_job_table ej
-  JOIN
-    job_profile_table jp ON ej.job_id = jp.job_id
-) AS latest_job ON e.employee_id = latest_job.employee_id AND latest_job.rnk = 1;
+
 
 d. delete all employee with employee_no 1000 job title, with effective date of 2020-01-01
-DELETE FROM employee_job_table
-WHERE employee_id = (SELECT employee_id FROM employee_profile_table WHERE employee_no = 1000) AND effective_date = '2020-01-01';
+
